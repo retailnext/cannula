@@ -64,14 +64,6 @@ import (
 	"time"
 )
 
-func init() {
-	http.Handle("/debug/pprof/", http.HandlerFunc(Index))
-	http.Handle("/debug/pprof/cmdline", http.HandlerFunc(Cmdline))
-	http.Handle("/debug/pprof/profile", http.HandlerFunc(Profile))
-	http.Handle("/debug/pprof/symbol", http.HandlerFunc(Symbol))
-	http.Handle("/debug/pprof/trace", http.HandlerFunc(Trace))
-}
-
 // Cmdline responds with the running program's
 // command line, with arguments separated by NUL bytes.
 // The package initialization registers it as /debug/pprof/cmdline.
