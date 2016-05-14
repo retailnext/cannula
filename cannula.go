@@ -7,6 +7,7 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/retailnext/cannula/expvar"
 	"github.com/retailnext/cannula/internal/net/http/pprof"
 )
 
@@ -46,6 +47,8 @@ func newServer() *server {
 	s.Handle("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
 	s.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
 	s.Handle("/debug/pprof/trace", http.HandlerFunc(pprof.Trace))
+
+	s.Handle("/debug/vars", http.HandlerFunc(expvar.Handler))
 
 	return s
 }

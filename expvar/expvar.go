@@ -302,7 +302,7 @@ func Do(f func(KeyValue)) {
 	}
 }
 
-func expvarHandler(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "{\n")
 	first := true
@@ -327,7 +327,6 @@ func memstats() interface{} {
 }
 
 func init() {
-	http.HandleFunc("/debug/vars", expvarHandler)
 	Publish("cmdline", Func(cmdline))
 	Publish("memstats", Func(memstats))
 }
