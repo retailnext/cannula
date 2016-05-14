@@ -4,15 +4,11 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	httpprof "net/http/pprof"
 	"sort"
 	"sync"
-)
 
-func init() {
-	// reset the side effect of loading net/http/pprof
-	http.DefaultServeMux = http.NewServeMux()
-}
+	"github.com/retailnext/cannula/internal/net/http/pprof"
+)
 
 var (
 	defaultServer = newServer()
@@ -45,11 +41,11 @@ func newServer() *server {
 	s.mux.HandleFunc("/", s.index)
 
 	// install net/http/pprof handlers also
-	s.Handle("/debug/pprof/", http.HandlerFunc(httpprof.Index))
-	s.Handle("/debug/pprof/cmdline", http.HandlerFunc(httpprof.Cmdline))
-	s.Handle("/debug/pprof/profile", http.HandlerFunc(httpprof.Profile))
-	s.Handle("/debug/pprof/symbol", http.HandlerFunc(httpprof.Symbol))
-	s.Handle("/debug/pprof/trace", http.HandlerFunc(httpprof.Trace))
+	s.Handle("/debug/pprof/", http.HandlerFunc(pprof.Index))
+	s.Handle("/debug/pprof/cmdline", http.HandlerFunc(pprof.Cmdline))
+	s.Handle("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
+	s.Handle("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
+	s.Handle("/debug/pprof/trace", http.HandlerFunc(pprof.Trace))
 
 	return s
 }
