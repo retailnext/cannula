@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"sort"
 	"sync"
 
@@ -15,15 +16,31 @@ var (
 	defaultServer = newServer()
 )
 
-func Start(listener net.Listener) error {
+// Start listens on the unix socket specified by path and then calls Serve.
+func Start(path string) error {
+	// cleanup old instances of our domain socket
+	os.Remove(path)
+
+	ln, err := net.Listen("unix", path)
+	if err != nil {
+		return err
+	}
+
+	return Serve(ln)
+}
+
+// Serve starts serving debug http requests on listener.
+func Serve(listener net.Listener) error {
 	httpServer := http.Server{Handler: defaultServer.mux}
 	return httpServer.Serve(listener)
 }
 
+// HandleFunc registers a new debug http.HandlerFunc.
 func HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) {
 	Handle(pattern, http.HandlerFunc(handler))
 }
 
+// Handle registers a new debug handler.
 func Handle(pattern string, handler http.Handler) {
 	defaultServer.mux.Handle(pattern, handler)
 }
