@@ -42,7 +42,7 @@ func HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)
 
 // Handle registers a new debug handler.
 func Handle(pattern string, handler http.Handler) {
-	defaultServer.mux.Handle(pattern, handler)
+	defaultServer.Handle(pattern, handler)
 }
 
 type server struct {
