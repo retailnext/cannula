@@ -15,3 +15,27 @@ Cannula is Go debug package that exposes debug information about your applicatio
 ## Connecting to the Cannula socket
 
 If you are using a recent version of curl (>= 7.40) you can use the `--unix-socket` to connect directly to the cannula socket. Otherwise you can use the `cannula-proxy` tool which creates a localhost proxy from an ephemeral tcp port to the unix socket. This is also how you can use `go tool pprof` directly against the running go application.
+
+
+## Using the default net/http/pprof and expvar handlers
+
+
+```
+# List all debug handlers (requires curl >= 7.40)
+curl --unix-socket /path/to/debug.sock 'http:/debug/'
+
+# List all goroutine stacks (requires curl >= 7.40)
+curl --unix-socket /path/to/debug.sock 'http:/debug/pprof/goroutine?debug=1'
+
+# start cannula-proxy
+
+cannula-proxy -addr 127.0.0.1:1337 /path/to/debug.sock &
+
+# run a 5 second cpu profile
+go tool pprof 'http://127.0.0.1:1337/debug/pprof/profile?seconds=5'
+
+# run a heap profile
+go tool pprof /path/to/server/binary http://127.0.0.1:1337/debug/pprof/heap
+
+curl http://127.0.0.1:1337/debug/vars
+```
